@@ -260,17 +260,16 @@ MOVQ	AX, g_m(CX)
 
 完成 m0 和 g0 的相互引用，通过 TLS，能够快速访问 GMP 的调度链
 
-┌─────────────────────────────────────┐
-│  当前线程（M）                        │
-├─────────────────────────────────────┤
-│  TLS[0] → 当前 G                     │
-│           ↓                          │
-│           g.m → 当前 M               │
-│                 ↓                    │
-│                 m.p → 当前 P         │
-│                       ↓              │
-│                       p.runq → G队列 │
-└─────────────────────────────────────┘
+
+    当前线程（M）
+    TLS[0] → 当前 G
+                ↓
+                g.m → 当前 M
+                        ↓
+                        m.p → 当前 P 
+                                ↓
+                                p.runq → G队列
+
 
 
 
@@ -976,43 +975,43 @@ top:
 
 findRunnable() 查找顺序：
 
-1. 清理和初始化
-   ├─ 清除 allp 快照
-   ├─ 检查 GC 等待 → gcstopm() → goto top
-   ├─ 检查安全点函数 → runSafePointFn()
-   └─ 检查定时器
+    1. 清理和初始化
+       ├─ 清除 allp 快照
+       ├─ 检查 GC 等待 → gcstopm() → goto top
+       ├─ 检查安全点函数 → runSafePointFn()
+       └─ 检查定时器
 
-2. 特殊 goroutine（优先级最高）
-   ├─ Trace reader (tryWakeP=true)
-   └─ GC worker (tryWakeP=true)
+    2. 特殊 goroutine（优先级最高）
+       ├─ Trace reader (tryWakeP=true)
+       └─ GC worker (tryWakeP=true)
 
-3. 全局队列公平性检查（每 61 次）
-   └─ schedtick % 61 == 0 → globrunqget()
+    3. 全局队列公平性检查（每 61 次）
+       └─ schedtick % 61 == 0 → globrunqget()
 
-4. 唤醒特殊 goroutine
-   ├─ Finalizer goroutine
-   └─ GC cleanup goroutine
+    4. 唤醒特殊 goroutine
+       ├─ Finalizer goroutine
+       └─ GC cleanup goroutine
 
-5. 本地队列（快速路径）
-   └─ runqget(pp) → 优先检查 runnext
+    5. 本地队列（快速路径）
+       └─ runqget(pp) → 优先检查 runnext
 
-6. 全局队列（批量获取）
-   └─ globrunqgetbatch() → 获取一半到本地队列
+    6. 全局队列（批量获取）
+       └─ globrunqgetbatch() → 获取一半到本地队列
 
-7. 网络轮询（非阻塞）
-   └─ netpoll(0) → 检查就绪的网络 I/O
+    7. 网络轮询（非阻塞）
+       └─ netpoll(0) → 检查就绪的网络 I/O
 
-8. 工作窃取
-   └─ stealWork() → 从其他 P 窃取
+    8. 工作窃取
+       └─ stealWork() → 从其他 P 窃取
 
-9. 空闲 GC 标记
-   └─ 如果有 GC 工作，运行空闲标记
+    9. 空闲 GC 标记
+       └─ 如果有 GC 工作，运行空闲标记
 
-10. 准备休眠
-    ├─ 释放 P
-    ├─ 再次检查所有队列
-    ├─ 网络轮询（阻塞）
-    └─ stopm() → 休眠 M
+    10. 准备休眠
+        ├─ 释放 P
+        ├─ 再次检查所有队列
+        ├─ 网络轮询（阻塞）
+        └─ stopm() → 休眠 M
 
 
 
