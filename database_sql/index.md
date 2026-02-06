@@ -915,5 +915,5 @@ func (db *DB) conn(ctx context.Context, strategy connReuseStrategy) (*driverConn
 
 4、未超过则调用其实现类的 connector 创建新连接
 
-<img src="../images/获取连接.png"  />
+![database_sql接口关系](../images/获取连接.png)
 

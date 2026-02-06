@@ -14,5 +14,4 @@
                 <img src="/images/panic%e5%ba%95%e5%b1%82%e6%ba%90%e7%a0%81%e8%a7%a3%e6%9e%90_banner.png" referrerpolicy="no-referrer">
             </div><p>基于 go1.22.6 版本解析 panic 的底层实现</p>]]></description></item><item><title>select</title><link>https://guangzou.github.io/select/</link><pubDate>Tue, 03 Feb 2026 16:44:51 +0800</pubDate><author>zg</author><guid>https://guangzou.github.io/select/</guid><description><![CDATA[<div class="featured-image">
                 <img src="/images/select%e5%ba%95%e5%b1%82%e6%ba%90%e7%a0%81%e8%a7%a3%e6%9e%90_banner.png" referrerpolicy="no-referrer">
-            </div><p>从源码角度看 select 的底层实现</p>]]></description></item><item><title>我的第一篇博客</title><link>https://guangzou.github.io/first_post/</link><pubDate>Tue, 03 Feb 2026 15:11:44 +0800</pubDate><author>zg</author><guid>https://guangzou.github.io/first_post/</guid><description>&lt;h2 id="开始写博客">开始写博客&lt;/h2>
-&lt;p>今天终于搭建好了自己的博客，使用 Hugo + LoveIt 主题，感觉还不错！&lt;/p></description></item></channel></rss>
+            </div><p>从源码角度看 select 的底层实现</p>]]></description></item></channel></rss>

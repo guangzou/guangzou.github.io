@@ -1997,37 +1997,7 @@ func retake(now int64) uint32 {
 
 #### 1.4 完整启动流程
 
-时间线：
-T0: 程序启动
-    ↓
-T1: 汇编入口（asm_amd64.s）
-    ├─ mainStarted = false（默认值）
-    ├─ newproc(runtime.main)  <-创建 main goroutine
-    │   ├─ runqput(P0, main_g, true)  <-放入 runnext
-    │   └─ if mainStarted { wakep() }  <-不执行！
-    └─ mstart()  <-启动 M0
-    
-T2: M0 进入调度循环
-    ├─ mstart0()
-    ├─ mstart1()
-    └─ schedule()  <-永不返回
-    
-T3: schedule() 查找 goroutine
-    ├─ findRunnable()
-    ├─ runqget(P0)  <-从 runnext 取出 main goroutine
-    └─ execute(main_g, inheritTime=true)  <-继承时间片
-    
-T4: 执行 runtime.main
-    ├─ mainStarted = true
-    ├─ 启动 sysmon
-    ├─ 执行 init 函数
-    └─ 执行 main.main()  ← 执行用户代码
-    
-T5: 用户代码中创建 goroutine
-    ├─ go func() { ... }
-    ├─ newproc(fn)
-    ├─ runqput(P0, new_g, true)
-    └─ if mainStarted { wakep() }  <-唤醒 m 执行 g
+![gmp完整启动流程](../images/gmp完整启动流程.png)
 
 
 
